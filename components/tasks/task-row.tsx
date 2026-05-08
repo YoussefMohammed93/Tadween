@@ -6,6 +6,7 @@ import {
   Calendar01Icon,
   Delete01Icon,
   Edit01Icon,
+  ViewIcon,
   TaskDone01Icon,
   Clock01Icon,
   CircleIcon,
@@ -49,6 +50,7 @@ import { PriorityBadge } from "@/components/tasks/priority-badge";
 interface TaskRowProps {
   task: Task;
   onEditClick: (task: Task) => void;
+  onViewClick: (task: Task) => void;
 }
 
 // Config for status styles
@@ -103,7 +105,7 @@ const PRIORITY_MENU_CONFIG: Record<
   },
 };
 
-export function TaskRow({ task, onEditClick }: TaskRowProps) {
+export function TaskRow({ task, onEditClick, onViewClick }: TaskRowProps) {
   const updateTask = useMutation(api.tasks.update);
   const removeTask = useMutation(api.tasks.remove);
 
@@ -155,7 +157,7 @@ export function TaskRow({ task, onEditClick }: TaskRowProps) {
         <div className="flex-1 min-w-0">
           <div className="flex flex-col gap-0.5">
             <button
-              onClick={() => onEditClick(task)}
+              onClick={() => onViewClick(task)}
               className={`text-left font-sans text-sm truncate block w-full transition-all duration-150 ${
                 isDone
                   ? "line-through text-muted-foreground/60"
@@ -242,6 +244,18 @@ export function TaskRow({ task, onEditClick }: TaskRowProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem
+              onClick={() => onViewClick(task)}
+              className="text-xs gap-2"
+            >
+              <HugeiconsIcon
+                icon={ViewIcon}
+                size={14}
+                className="text-muted-foreground group-focus/dropdown-menu-item:text-accent-foreground"
+              />
+              View details
+            </DropdownMenuItem>
+
             <DropdownMenuItem
               onClick={() => onEditClick(task)}
               className="text-xs gap-2"

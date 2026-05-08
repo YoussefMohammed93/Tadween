@@ -190,3 +190,21 @@ export const reorder = mutation({
     return args.taskId;
   },
 });
+
+// Move a task to a different status column + update order
+export const moveToColumn = mutation({
+  args: {
+    id: v.id("tasks"),
+    status: v.union(
+      v.literal("todo"),
+      v.literal("in-progress"),
+      v.literal("done"),
+    ),
+    order: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthenticated");
+    await ctx.db.patch(args.id, { status: args.status, order: args.order });
+  },
+});

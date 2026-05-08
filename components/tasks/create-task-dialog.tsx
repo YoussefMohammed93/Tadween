@@ -39,12 +39,14 @@ interface CreateTaskDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   userId: string;
+  initialStatus?: "todo" | "in-progress" | "done";
 }
 
 export function CreateTaskDialog({
   open,
   onOpenChange,
   userId,
+  initialStatus,
 }: CreateTaskDialogProps) {
   const createTask = useMutation(api.tasks.create);
 
@@ -54,7 +56,9 @@ export function CreateTaskDialog({
   const [priority, setPriority] = useState<
     "low" | "medium" | "high" | "urgent"
   >("medium");
-  const [status, setStatus] = useState<"todo" | "in-progress" | "done">("todo");
+  const [status, setStatus] = useState<"todo" | "in-progress" | "done">(
+    initialStatus ?? "todo",
+  );
   const [dueDate, setDueDate] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [customTag, setCustomTag] = useState("");
@@ -65,7 +69,7 @@ export function CreateTaskDialog({
     setDescription("");
     setType("daily");
     setPriority("medium");
-    setStatus("todo");
+    setStatus(initialStatus ?? "todo");
     setDueDate("");
     setSelectedTags([]);
     setCustomTag("");

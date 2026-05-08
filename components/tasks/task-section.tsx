@@ -22,6 +22,7 @@ interface TaskSectionProps {
   title: string;
   tasks: Task[];
   onEditClick: (task: Task) => void;
+  onViewClick: (task: Task) => void;
   onCreateClick: () => void;
 }
 
@@ -57,6 +58,7 @@ export function TaskSection({
   title,
   tasks,
   onEditClick,
+  onViewClick,
   onCreateClick,
 }: TaskSectionProps) {
   const [isOpen, setIsOpen] = useState(true);
@@ -104,7 +106,12 @@ export function TaskSection({
         ) : (
           <div className="flex flex-col gap-3 pt-1 pl-6">
             {sortedTasks.map((task) => (
-              <TaskRow key={task._id} task={task} onEditClick={onEditClick} />
+              <TaskRow
+                key={task._id}
+                task={task}
+                onEditClick={onEditClick}
+                onViewClick={onViewClick}
+              />
             ))}
           </div>
         )}

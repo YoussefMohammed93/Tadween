@@ -31,6 +31,7 @@ interface TaskFiltersProps {
   onStatusToggle: (status: Status) => void;
   activePriorities: Priority[];
   onPriorityToggle: (priority: Priority) => void;
+  hideStatus?: boolean;
 }
 
 const statusOptions: { value: Status; label: string }[] = [
@@ -60,6 +61,7 @@ export function TaskFilters({
   onStatusToggle,
   activePriorities,
   onPriorityToggle,
+  hideStatus = false,
 }: TaskFiltersProps) {
   const hasActiveFilters =
     activeStatuses.length > 0 || activePriorities.length > 0;
@@ -92,39 +94,48 @@ export function TaskFilters({
       <div className="h-5 w-px bg-border" />
 
       {/* Status filter */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant={activeStatuses.length > 0 ? "default" : "outline"}
-            size="sm"
-            className="h-8 gap-1.5 text-xs font-medium rounded-lg"
-          >
-            <HugeiconsIcon icon={FilterIcon} size={13} color="currentColor" />
-            Status
-            {activeStatuses.length > 0 && (
-              <span className="ml-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-md bg-primary-foreground/20 text-[10px] font-bold text-primary-foreground px-1">
-                {activeStatuses.length}
-              </span>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-44">
-          <DropdownMenuLabel className="text-xs font-semibold">
-            Filter by status
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {statusOptions.map((opt) => (
-            <DropdownMenuCheckboxItem
-              key={opt.value}
-              checked={activeStatuses.includes(opt.value)}
-              onCheckedChange={() => onStatusToggle(opt.value)}
-              className="text-xs"
-            >
-              {opt.label}
-            </DropdownMenuCheckboxItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {!hideStatus && (
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={activeStatuses.length > 0 ? "default" : "outline"}
+                size="sm"
+                className="h-8 gap-1.5 text-xs font-medium rounded-lg"
+              >
+                <HugeiconsIcon
+                  icon={FilterIcon}
+                  size={13}
+                  color="currentColor"
+                />
+                Status
+                {activeStatuses.length > 0 && (
+                  <span className="ml-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-md bg-primary-foreground/20 text-[10px] font-bold text-primary-foreground px-1">
+                    {activeStatuses.length}
+                  </span>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-44">
+              <DropdownMenuLabel className="text-xs font-semibold">
+                Filter by status
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {statusOptions.map((opt) => (
+                <DropdownMenuCheckboxItem
+                  key={opt.value}
+                  checked={activeStatuses.includes(opt.value)}
+                  onCheckedChange={() => onStatusToggle(opt.value)}
+                  className="text-xs"
+                >
+                  {opt.label}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="h-5 w-px bg-border" />
+        </>
+      )}
 
       {/* Priority filter */}
       <DropdownMenu>
