@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useUser, useClerk } from "@clerk/clerk-react";
-import { usePathname, useRouter } from "next/navigation";
+
 import {
   Sidebar,
   SidebarContent,
@@ -16,9 +15,6 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon,
   CheckListIcon,
@@ -31,7 +27,11 @@ import {
   Settings01Icon,
   Logout01Icon,
 } from "@hugeicons/core-free-icons";
+import { useClerk } from "@clerk/clerk-react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePathname, useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mainNavItems = [
   { title: "Dashboard", icon: Home01Icon, href: "/" },
@@ -60,16 +60,14 @@ export function AppSidebar() {
     (userRecord?.firstName?.[0] ?? "") + (userRecord?.lastName?.[0] ?? "");
 
   return (
-    <Sidebar collapsible="none" className="w-[240px] border-r border-border bg-sidebar">
+    <Sidebar
+      collapsible="none"
+      className="w-[240px] border-r border-border bg-sidebar"
+    >
       {/* Brand */}
       <SidebarHeader className="px-4 pt-4 pb-3">
         <div className="flex items-center gap-2.5">
-          <Image
-            src="/logo.png"
-            alt="Tadween"
-            width={28}
-            height={28}
-          />
+          <Image src="/logo.png" alt="Tadween" width={28} height={28} />
           <span className="font-heading text-lg font-bold tracking-tight text-foreground">
             Tadween
           </span>
@@ -89,12 +87,20 @@ export function AppSidebar() {
               {mainNavItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    isActive={pathname === item.href}
+                    isActive={
+                      pathname.replace(/\/+$/, "") ===
+                        item.href.replace(/\/+$/, "") ||
+                      (item.href === "/" && pathname === "/")
+                    }
                     tooltip={item.title}
                     onClick={() => router.push(item.href)}
                     className="gap-3 rounded-lg text-[13px] font-medium transition-colors"
                   >
-                    <HugeiconsIcon icon={item.icon} size={18} strokeWidth={1.8} />
+                    <HugeiconsIcon
+                      icon={item.icon}
+                      size={18}
+                      strokeWidth={1.8}
+                    />
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -114,12 +120,20 @@ export function AppSidebar() {
               {libraryItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    isActive={pathname === item.href}
+                    isActive={
+                      pathname.replace(/\/+$/, "") ===
+                        item.href.replace(/\/+$/, "") ||
+                      (item.href === "/" && pathname === "/")
+                    }
                     tooltip={item.title}
                     onClick={() => router.push(item.href)}
                     className="gap-3 rounded-lg text-[13px] font-medium transition-colors"
                   >
-                    <HugeiconsIcon icon={item.icon} size={18} strokeWidth={1.8} />
+                    <HugeiconsIcon
+                      icon={item.icon}
+                      size={18}
+                      strokeWidth={1.8}
+                    />
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -140,7 +154,11 @@ export function AppSidebar() {
               isActive={pathname === "/settings"}
               className="gap-3 rounded-lg text-[13px] font-medium transition-colors"
             >
-              <HugeiconsIcon icon={Settings01Icon} size={18} strokeWidth={1.8} />
+              <HugeiconsIcon
+                icon={Settings01Icon}
+                size={18}
+                strokeWidth={1.8}
+              />
               <span>Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -156,7 +174,6 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
 
-
         {/* User card (Display only) */}
         <div className="flex items-center gap-2.5 p-2.5">
           {userRecord === undefined ? (
@@ -170,7 +187,10 @@ export function AppSidebar() {
           ) : (
             <>
               <Avatar className="h-8 w-8 shrink-0 rounded-lg border border-border/50">
-                <AvatarImage src={userRecord?.imageUrl} alt={userRecord?.firstName ?? ""} />
+                <AvatarImage
+                  src={userRecord?.imageUrl}
+                  alt={userRecord?.firstName ?? ""}
+                />
                 <AvatarFallback className="bg-primary text-[10px] font-bold text-primary-foreground">
                   {initials || "U"}
                 </AvatarFallback>

@@ -1,7 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/clerk-react";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   CheckListIcon,
   NoteIcon,
@@ -13,6 +11,8 @@ import {
   Calendar01Icon,
   Quote,
 } from "@hugeicons/core-free-icons";
+import { useRouter } from "next/navigation";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 type IconType = typeof Add01Icon;
 
@@ -22,10 +22,11 @@ import { api } from "@/convex/_generated/api";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function DashboardHome() {
+  const router = useRouter();
   const userRecord = useQuery(api.users.currentUser);
-  
+
   const greeting = getGreeting();
-  
+
   return (
     <div className="flex w-full flex-col gap-10">
       {/* Header & Quote Section */}
@@ -104,16 +105,19 @@ export function DashboardHome() {
             icon={Add01Icon}
             label="New Task"
             color="bg-primary"
+            onClick={() => router.push("/tasks")}
           />
           <QuickActionItem
             icon={Edit01Icon}
             label="New Note"
             color="bg-orange-500"
+            onClick={() => router.push("/notes")}
           />
           <QuickActionItem
             icon={FolderAddIcon}
             label="New Project"
             color="bg-emerald-500"
+            onClick={() => router.push("/projects")}
           />
           <QuickActionItem
             icon={Calendar01Icon}
@@ -207,15 +211,20 @@ function QuickActionItem({
   icon,
   label,
   color,
+  onClick,
 }: {
   icon: IconType;
   label: string;
   color: string;
+  onClick?: () => void;
 }) {
   return (
-    <button className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-primary/30 hover:bg-muted/30">
+    <button
+      onClick={onClick}
+      className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-primary/30 hover:bg-muted/30"
+    >
       <div
-        className={`flex h-10 w-10 items-center justify-center rounded-xl ${color} text-white shadow-sm`}
+        className={`flex h-10 w-10 items-center justify-center rounded-xl ${color} text-white`}
       >
         <HugeiconsIcon icon={icon} size={18} strokeWidth={2} />
       </div>

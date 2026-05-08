@@ -29,6 +29,8 @@ export const metadata: Metadata = {
     "Tasks, notes, projects, lectures — everything in one place. Organized. Synced. Yours.",
 };
 
+import { Toaster } from "@/components/ui/sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,6 +51,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
+        <Toaster position="bottom-right" closeButton />
       </body>
     </html>
   );
