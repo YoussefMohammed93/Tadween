@@ -1,8 +1,11 @@
 "use client";
 
 import { ReactNode } from "react";
+import { useAuth } from "@clerk/clerk-react";
 import { ClerkProvider } from "@clerk/clerk-react";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { ConvexReactClient } from "convex/react";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -15,7 +18,9 @@ if (!PUBLISHABLE_KEY) {
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <ConvexProvider client={convex}>{children}</ConvexProvider>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+      </ConvexProviderWithClerk>
     </ClerkProvider>
   );
 }
